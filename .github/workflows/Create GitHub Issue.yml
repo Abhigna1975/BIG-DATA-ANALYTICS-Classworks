@@ -1,20 +1,38 @@
-name: Create GitHub Issue
+name: Create Multiple GitHub Issues
 
 on:
   push:
     branches:
-      - main  # This triggers the workflow on a push to the main branch
+      - main  # Trigger on a push to the main branch
   
 jobs:
-  create_issue:
+  create_issues:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Create an issue
+    - name: Create issue 1
       uses: peter-evans/create-issue-from-file@v5
       with:
-        title: "Automated Issue Test - ${{ github.sha }}"  # Title will include the commit SHA
-        content-filepath: .github/ISSUE_TEMPLATE/automated_issue.md
-        labels: "test, manual"  # Labels to indicate this was a test/manual trigger
+        title: "Automated Issue 1 - ${{ github.sha }}"
+        content-filepath: .github/ISSUE_TEMPLATE/automated_issue_1.md
+        labels: "test, manual"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create issue 2
+      uses: peter-evans/create-issue-from-file@v5
+      with:
+        title: "Automated Issue 2 - ${{ github.sha }}"
+        content-filepath: .github/ISSUE_TEMPLATE/automated_issue_2.md
+        labels: "test, manual"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create issue 3
+      uses: peter-evans/create-issue-from-file@v5
+      with:
+        title: "Automated Issue 3 - ${{ github.sha }}"
+        content-filepath: .github/ISSUE_TEMPLATE/automated_issue_3.md
+        labels: "test, manual"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

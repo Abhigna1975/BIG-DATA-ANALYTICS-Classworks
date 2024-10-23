@@ -1,0 +1,20 @@
+name: Create GitHub Issue
+
+on:
+  push:
+    branches:
+      - main  # This triggers the workflow on a push to the main branch
+  
+jobs:
+  create_issue:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Create an issue
+      uses: peter-evans/create-issue-from-file@v5
+      with:
+        title: "Automated Issue Test - ${{ github.sha }}"  # Title will include the commit SHA
+        content-filepath: .github/ISSUE_TEMPLATE/automated_issue.md
+        labels: "test, manual"  # Labels to indicate this was a test/manual trigger
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,42 @@
+name: Create Issues and Respond
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_issues_and_respond:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install gh
+
+      - name: Create Issues from Files
+        id: create_issue
+        run: |
+          # Loop through specific files in the specified directory
+          for file in path/to/your/files/*; do
+            title=$(basename "$file")
+            body=$(cat "$file")
+            echo "Creating issue for $title"
+            issue_number=$(gh issue create --title "$title" --body "$body" --label "question" --repo username/big-data-classwork --json number -q ".number")
+            echo "Created issue #$issue_number"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Respond to Created Issues
+        run: |
+          # Loop through the created issues and respond
+          for issue in $(gh issue list --state open --repo username/big-data-classwork --json number -q ".[] | .number"); do
+            echo "Responding to issue #$issue"
+            gh issue comment "$issue" --body "Thank you for your question! We're looking into it." --repo username/big-data-classwork
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
